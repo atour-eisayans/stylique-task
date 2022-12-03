@@ -1,0 +1,2 @@
+config files:
+all the configs will be located in configs/config.js file. There is also a file called config.dist.js which is a template for config file - everytime we add a new property to config.js file, we must create same property in the config.dist.js file. It's like a blueprint for config.js file - we'll use it when we wanna create a new environment. Each environment will have its own config.js file.
