@@ -6,7 +6,6 @@ class UserController {
         try {
             console.log('create user in controller');
             userService.createUser();
-            throw new CustomError('something bad happened!');
             res.status(201).send();
         } catch (error) {
             next(error);

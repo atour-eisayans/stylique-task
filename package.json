@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
     "create-migration": "knex migrate:make --knexfile configs/knexfile.js --migrations-directory ../db/migrations",
     "migrations-up": "knex migrate:latest --migrations-directory ../db/migrations --knexfile configs/knexfile.js",
     "migrations-down": "knex migrate:rollback --migrations-directory ../db/migrations --knexfile configs/knexfile.js",
