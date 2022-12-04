@@ -4,11 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "create-migration": "knex migrate:make --knexfile configs/knexfile.js --migrations-directory ../db/migrations",
+    "migrations-up": "knex migrate:latest --migrations-directory ../db/migrations --knexfile configs/knexfile.js",
+    "migrations-down": "knex migrate:rollback --migrations-directory ../db/migrations --knexfile configs/knexfile.js",
+    "migrations-down-all": "knex migrate:rollback --all --migrations-directory ../db/migrations --knexfile configs/knexfile.js",
+    "next-migration-up": "knex migrate:up --migrations-directory ../db/migrations --knexfile configs/knexfile.js",
+    "run-one-migration": "knex migrate:up --migrations-directory ../db/migrations --knexfile configs/knexfile.js"
   },
   "author": "Atour Eisayans",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "knex": "^2.3.0",
+    "pg": "^8.8.0"
   }
 }
