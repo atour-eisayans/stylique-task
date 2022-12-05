@@ -22,7 +22,7 @@ module.exports = {
             secrets.jwt,
             (error, decoded) => {
                 if (error) {
-                    reject(error);
+                    resolve(false);
                 } else {
                     resolve(decoded);
                 }

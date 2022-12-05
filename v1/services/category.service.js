@@ -1,19 +1,29 @@
 const categoryModel = require('../models/category.model');
+const { BadRequestError } = require('../../errors');
 
 class CategoryService {
-    createCategory() {
-        console.log('create cat in service');
-        categoryModel.insertCategory();
+    async createCategory(categoryDetails) {
+        const category = await categoryModel.insertCategory(categoryDetails);
+        return category;
     }
 
-    listAllCategories() {
-        console.log('list all cats in service');
-        categoryModel.readCategories();
+    async listAllCategories({ page, skip, limit }) {
+        const categories = await categoryModel.fetchCategories({ skip, limit });
+        return {
+            page,
+            limit,
+            data: categories,
+        };
     }
 
-    removeCategory() {
-        console.log('remove cat in service');
-        categoryModel.removeCategory();
+    async removeCategory({ categoryId }) {
+        const removedCategory = await categoryModel.removeCategory(categoryId);
+        if (!removedCategory) {
+            throw new BadRequestError({
+                error: 'invalid category id!'
+            })
+        }
+        return removedCategory;
     }
 }
 

@@ -1,14 +1,36 @@
+const { getConnection: getPGConnection } = require('../../db/psqlConnection');
+const pgConnection = getPGConnection();
+
 class CategoryModel {
-    insertCategory() {
-        console.log('create cat in model');
+    async insertCategory(categoryDetails) {
+        const [category = null] = await pgConnection
+            .insert({
+                name: categoryDetails.name,
+                description: categoryDetails.description,
+            },
+            ['id', 'name'])
+            .into('categories');
+        return category;
     }
 
-    readCategories() {
-        console.log('get all cats in model');
+    async fetchCategories({ skip, limit }) {
+        const categories = await pgConnection
+            .select('*')
+            .from('categories')
+            .limit(limit)
+            .offset(skip);
+        return categories;
     }
 
-    removeCategory() {
-        console.log('remove cat in model')
+    async removeCategory(categoryId) {
+        const [category = null] = await pgConnection
+            .delete()
+            .from('categories')
+            .where({
+                id: categoryId,
+            })
+            .returning(['id']);
+        return category;
     }
 }
 

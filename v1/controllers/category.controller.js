@@ -1,31 +1,36 @@
 const categoryService = require('../services/category.service');
+const {
+    createCategory: createCategoryValidation,
+    listCategories: listCategoriesValidation,
+    removeCategory: removeCategoryValidation,
+} = require('../validators/category.validators');
 
 class CategoryController {
-    createCategory(req, res, next) {
+    async createCategory(req, res, next) {
         try {
-            console.log('create user in controller');
-            categoryService.createCategory();
-            res.status(201).send();
+            const validatedBody = createCategoryValidation(req.body);
+            const category = await categoryService.createCategory(validatedBody);
+            res.status(201).json(category);
         } catch (error) {
             next(error);
         }
     }
 
-    listCategories(req, res, next) {
+    async listAllCategories(req, res, next) {
         try {
-            console.log('login user in controller');
-            categoryService.listAllCategories();
-            res.status(200).send();
+            const validatedParams = listCategoriesValidation(req.query);
+            const categories = await categoryService.listAllCategories(validatedParams);
+            res.status(200).json(categories);
         } catch (error) {
             next(error);
         }
     }
 
-    removeCategory(req, res, next) {
+    async removeCategory(req, res, next) {
         try {
-            console.log('remove cat in controller');
-            categoryService.removeCategory();
-            res.status(200).send();
+            const validatedBody = removeCategoryValidation(req.query);
+            const removedCategory = await categoryService.removeCategory(validatedBody);
+            res.status(200).json(removedCategory);
         } catch (error) {
             next(error);
         }
