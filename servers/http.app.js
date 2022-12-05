@@ -4,6 +4,8 @@ const errorHandler = require('../helpers/errorHandler');
 
 const app = express();
 
+app.use(express.json());
+
 app.use('/api/v1', v1Routes);
 app.use((error, req, res, next) => errorHandler(error, { httpResponder: res }));
 

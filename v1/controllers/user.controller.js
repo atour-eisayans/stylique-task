@@ -1,22 +1,30 @@
 const userService = require('../services/user.service');
-const { CustomError } = require('../../errors');
+const {
+    createUser: createUserValidation,
+    loginUser: checkUserCreditionals,
+} = require('../validators/user.validator');
+const { generate: tokenGenerator } = require('../../helpers/loginTokenHandler');
 
 class UserController {
-    signupUser(req, res, next) {
+    async signupUser(req, res, next) {
         try {
-            console.log('create user in controller');
-            userService.createUser();
-            res.status(201).send();
+            const validatedBody = createUserValidation(req.body);
+            const user = await userService.createUser(validatedBody);
+            res.status(201).json(user);
         } catch (error) {
             next(error);
         }
     }
 
-    signinUser(req, res, next) {
+    async signinUser(req, res, next) {
         try {
-            console.log('login user in controller');
-            userService.loginUser();
-            res.status(200).send();
+            const validatedBody = checkUserCreditionals(req.body);
+            const authenticatedUser = await userService.checkUser(validatedBody);
+            const token = await tokenGenerator(authenticatedUser);
+            res.status(200).json({
+                ...authenticatedUser,
+                token,
+            });
         } catch (error) {
             next(error);
         }

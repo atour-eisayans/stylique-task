@@ -1,10 +1,26 @@
+const { getConnection: getPGConnection } = require('../../db/psqlConnection');
+const pgConnection = getPGConnection();
+
 class UserModel {
-    createUser() {
-        console.log('create user in model');
+    async insertUser(userInfo) {
+        const user = await pgConnection
+            .insert({
+                name: userInfo.name,
+                login: userInfo.login,
+                password: userInfo.password,
+                role: userInfo.role,
+            },
+            ['id', 'role'])
+            .into('users');
+        return user;
     }
 
-    loginUser() {
-        console.log('login user in model');
+    async fetchUserByLogin(userLogin) {
+        const [user = null] = await pgConnection
+            .where({ login: userLogin })
+            .select('*')
+            .from('users');
+        return user;
     }
 }
 

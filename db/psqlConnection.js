@@ -4,11 +4,11 @@ const postgresConfig = require('../configs/knexfile');
 const dbConnection = knex(postgresConfig);
 
 module.exports = {
-    getConnection: () => {
+    getConnection: (tableName = '') => {
         if (!dbConnection) {
             throw new Error('...')
         }
-        return dbConnection;
+        return tableName? dbConnection(tableName) : dbConnection;
     },
     testConnection: async () => {
         // tiny technical debt

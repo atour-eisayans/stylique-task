@@ -1,14 +1,30 @@
 const userModel = require('../models/user.model');
+const {
+    BadRequestError,
+} = require('../../errors');
 
 class UserService {
-    createUser() {
-        console.log('create user in service');
-        userModel.createUser();
+    async createUser(userInfo) {
+        const user = await userModel.insertUser(userInfo);
+        return user;
     }
 
-    loginUser() {
-        console.log('login user in service');
-        userModel.loginUser();
+    async checkUser(userInfo) {
+        console.log('userInfo: ', userInfo);
+        const { login: userLogin, password } = userInfo;
+        const user = await userModel.fetchUserByLogin(userLogin);
+        if (!user) {
+            throw new BadRequestError({error: 'user not found'});
+        }
+
+        if (user.password !== password) {
+            throw new BadRequestError({error: 'wrong password'});
+        }
+        return {
+            id: user.id,
+            login: userLogin,
+            role: user.role,
+        };
     }
 }
 
