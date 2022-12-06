@@ -13,5 +13,11 @@ module.exports = {
     },
     secrets: {
         hashSalt: 'some-secret-phrase',
+        jwt: 'some-secret-phrase',
+    },
+    uploads: {
+        destination: '/path/to/uploads',
+        allowedImageFormats: ['array of extensions like .jpg, .png'],
+        imagesMaxSize: '<number>-in bytes',
     },
 };

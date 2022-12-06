@@ -8,7 +8,9 @@ module.exports = {
         try {
             const token = req.get('auth-token') || null;
             if (!token) {
-                throw new AuthenticationError();
+                throw new AuthenticationError({
+                    error: 'provide auth-token'
+                });
             }
             const decoded = await verifyLoginToken(token);
             if (!decoded) {

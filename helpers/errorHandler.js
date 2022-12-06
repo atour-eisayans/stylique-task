@@ -1,9 +1,6 @@
-const {
-    CustomError,
-    BadRequestError,
-} = require('../errors');
+const { CustomError, BadRequestError } = require('../errors');
 
-module.exports = (error, { httpResponder = null }) => {
+module.exports = (error, { httpResponder = null, httpServer = null }) => {
     if (error instanceof CustomError) {
         console.log('catched custom error ->', error);
         httpResponder.status(error.statusCode).json(error);
@@ -16,5 +13,8 @@ module.exports = (error, { httpResponder = null }) => {
         httpResponder.status(badRequestError.statusCode).json(badRequestError);
     } else {
         console.log(error);
+        if (httpServer) {
+            httpServer.close();
+        }
     }
-}
+};

@@ -1,21 +1,29 @@
 const articleService = require('../services/article.service');
+const {
+    publishArticle: publishArticleValidation,
+    listArticles: listArticlesValidation,
+} = require('../validators/article.validator');
+const removeUploadedFiles = require('../../helpers/removeUploadedFiles');
 
 class ArticleController {
-    createArticle(req, res, next) {
+    async publishArticle(req, res, next) {
         try {
-            console.log('create article in controller');
-            articleService.createArticle();
-            res.status(201).send();
+            const validatedBody = publishArticleValidation({
+                ...req.body,
+                userId: -1 //req.decodedUser.id,
+            });
+            const article = await articleService.createArticle(validatedBody);
+            res.status(201).json(article);
         } catch (error) {
             next(error);
         }
     }
 
-    listArticles(req, res, next) {
+    async listArticles(req, res, next) {
         try {
-            console.log('list articles in controller');
-            articleService.listAllArticles();
-            res.status(200).send();
+            const validatedParams = listArticlesValidation(req.query);
+            const articles = await articleService.listAllArticles(validatedParams);
+            res.status(200).json(articles);
         } catch (error) {
             next(error);
         }

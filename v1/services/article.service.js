@@ -1,14 +1,18 @@
 const articleModel = require('../models/article.model');
 
 class ArticleService {
-    createArticle() {
-        console.log('create article in service');
-        articleModel.insertArticle();
+    async createArticle(articleDetails) {
+        const article = await articleModel.insertArticle(articleDetails);
+        return article;
     }
 
-    listAllArticles() {
-        console.log('list all articles in service');
-        articleModel.readArticles();
+    async listAllArticles({ page, skip, limit }) {
+        const articles = await articleModel.readArticles({ skip, limit });
+        return {
+            page,
+            limit,
+            data: articles,
+        };
     }
 }
 
