@@ -10,15 +10,14 @@ class UserService {
     }
 
     async checkUser(userInfo) {
-        console.log('userInfo: ', userInfo);
         const { login: userLogin, password } = userInfo;
         const user = await userModel.fetchUserByLogin(userLogin);
         if (!user) {
-            throw new BadRequestError({error: 'user not found'});
+            throw new BadRequestError({error: 'invalid username or password'});
         }
 
         if (user.password !== password) {
-            throw new BadRequestError({error: 'wrong password'});
+            throw new BadRequestError({error: 'invalid username or password'});
         }
         return {
             id: user.id,

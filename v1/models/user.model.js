@@ -1,9 +1,10 @@
 const { getConnection: getPGConnection } = require('../../db/psqlConnection');
+const { pgTables } = require('../../configs/config');
 const pgConnection = getPGConnection();
 
 class UserModel {
     async insertUser(userInfo) {
-        const user = await pgConnection
+        const [user = null] = await pgConnection
             .insert({
                 name: userInfo.name,
                 login: userInfo.login,
@@ -11,15 +12,15 @@ class UserModel {
                 role: userInfo.role,
             },
             ['id', 'role'])
-            .into('users');
+            .into(pgTables.users);
         return user;
     }
 
     async fetchUserByLogin(userLogin) {
         const [user = null] = await pgConnection
-            .where({ login: userLogin })
             .select('*')
-            .from('users');
+            .from(pgTables.users)
+            .where({ login: userLogin });
         return user;
     }
 }

@@ -1,4 +1,5 @@
 const { getConnection: getPGConnection } = require('../../db/psqlConnection');
+const { pgTables } = require('../../configs/config');
 const pgConnection = getPGConnection();
 
 class CategoryModel {
@@ -9,14 +10,14 @@ class CategoryModel {
                 description: categoryDetails.description,
             },
             ['id', 'name'])
-            .into('categories');
+            .into(pgTables.categories);
         return category;
     }
 
     async fetchCategories({ skip, limit }) {
         const categories = await pgConnection
             .select('*')
-            .from('categories')
+            .from(pgTables.categories)
             .limit(limit)
             .offset(skip);
         return categories;
@@ -25,7 +26,7 @@ class CategoryModel {
     async removeCategory(categoryId) {
         const [category = null] = await pgConnection
             .delete()
-            .from('categories')
+            .from(pgTables.categories)
             .where({
                 id: categoryId,
             })

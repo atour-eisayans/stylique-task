@@ -10,7 +10,7 @@ class ArticleController {
         try {
             const validatedBody = publishArticleValidation({
                 ...req.body,
-                userId: -1 //req.decodedUser.id,
+                userId: req.decodedUser.id,
             });
             const article = await articleService.createArticle(validatedBody);
             res.status(201).json(article);

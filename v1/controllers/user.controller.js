@@ -1,7 +1,7 @@
 const userService = require('../services/user.service');
 const {
     createUser: createUserValidation,
-    loginUser: checkUserCreditionals,
+    loginUser: loginUserValidation,
 } = require('../validators/user.validator');
 const { generate: tokenGenerator } = require('../../helpers/loginTokenHandler');
 
@@ -18,7 +18,7 @@ class UserController {
 
     async signinUser(req, res, next) {
         try {
-            const validatedBody = checkUserCreditionals(req.body);
+            const validatedBody = loginUserValidation(req.body);
             const authenticatedUser = await userService.checkUser(validatedBody);
             const token = await tokenGenerator(authenticatedUser);
             res.status(200).json({

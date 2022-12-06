@@ -1,4 +1,5 @@
 const { getConnection: getPGConnection } = require('../../db/psqlConnection');
+const { pgTables } = require('../../configs/config');
 const pgConnection = getPGConnection();
 
 class ArticleModel {
@@ -12,31 +13,31 @@ class ArticleModel {
                 images: JSON.stringify(articleDetails.images),
             },
             ['id', 'name', 'content', 'images'])
-            .into('articles');
+            .into(pgTables.articles);
         return article;
     }
 
     async readArticles({ skip, limit }) {
         const articles = await pgConnection
             .select(
-                'articles.id as articleId',
-                'articles.name as articleName',
-                'articles.content as articleContent',
-                'articles.updated_at as articleLastUpdate',
-                'articles.images as images',
-                'categories.name as categoryName',
-                'users.name as publisher',
+                `${pgTables.articles}.id as articleId`,
+                `${pgTables.articles}.name as articleName`,
+                `${pgTables.articles}.content as articleContent`,
+                `${pgTables.articles}.updated_at as articleLastUpdate`,
+                `${pgTables.articles}.images as images`,
+                `${pgTables.categories}.name as categoryName`,
+                `${pgTables.users}.name as publisher`,
             )
-            .from('articles')
+            .from(pgTables.articles)
             .innerJoin(
-                'categories',
-                'categories.id',
-                'articles.category_id',
+                pgTables.categories,
+                `${pgTables.categories}.id`,
+                `${pgTables.articles}.category_id`,
             )
             .innerJoin(
-                'users',
-                'users.id',
-                'articles.user_id',
+                pgTables.users,
+                `${pgTables.users}.id`,
+                `${pgTables.articles}.user_id`,
             )
             .offset(skip)
             .limit(limit);

@@ -20,4 +20,7 @@ module.exports = {
         allowedImageFormats: ['array of extensions like .jpg, .png'],
         imagesMaxSize: '<number>-in bytes',
     },
+    pgTables: {
+        alias: 'db-table-name',
+    },
 };

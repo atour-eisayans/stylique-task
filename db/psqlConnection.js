@@ -11,7 +11,7 @@ module.exports = {
         return tableName? dbConnection(tableName) : dbConnection;
     },
     testConnection: async () => {
-        // tiny technical debt
+        // TODO: create a real test
         console.log('connection has been checked!');
     },
 };
